@@ -147,7 +147,18 @@ public class GnirehtetService extends VpnService {
             return false;
         }
 
-        setAsUndernlyingNetwork();
+        for (int i = 0; i < 5; ++i) { // Retry 5 times
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+            }
+            if (findVpnNetwork() != null) {
+                Log.d(TAG, "VPN network found, setting as underlying network.");
+                setAsUndernlyingNetwork();
+                break;
+            }
+        }
+
         return true;
     }
 
